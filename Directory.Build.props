@@ -1,0 +1,23 @@
+<Project>
+  <Import Project="version.props" />
+
+  <PropertyGroup>
+    <Copyright>Copyright © Alexander Paskhin $([System.DateTime]::Now.ToString('yyyy')). All rights reserved.</Copyright>
+    <Authors>Alexander Paskhin</Authors>
+    <Company>Wallsmedia Ltd.</Company>
+    <ProductPrefix>Parallel.MediatoR</ProductPrefix>
+
+    <PackageProjectUrl>http://github.com/Wallsmedia/Parallel.MediatoR</PackageProjectUrl>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/Wallsmedia/Parallel.MediatoR</RepositoryUrl>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <DotNetCoreAppVersion>net6.0</DotNetCoreAppVersion>
+    <DotNetCoreVersion>netstandard2.1</DotNetCoreVersion>
+  </PropertyGroup>
+</Project>

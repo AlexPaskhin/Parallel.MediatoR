@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(DotNetCoreAppVersion)</TargetFrameworks>
+
+    <PackageId>Parallel.MediatoR</PackageId>
+
+    <AssemblyVersion>$(CoreVersion)</AssemblyVersion>
+    <FileVersion>$(CoreVersion)</FileVersion>
+    <Version>$(CorePackageVersion)</Version>
+    <RootNamespace>Parallel.MediatoR</RootNamespace>
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\build\Parallel.Mediator.snk</AssemblyOriginatorKeyFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+
+    <Product>$(ProductPrefix)</Product>
+
+    <Description>
+      The Message Queue Mediator Abstraction interfaces.
+    </Description>
+
+    <PackageTags>MQ Mediator Abstraction</PackageTags>
+
+    <PackageReleaseNotes>
+      The Parallel Message Queue Mediator.
+      They are used to implement the internal application message exchange system.
+    </PackageReleaseNotes>
+
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)' != 'true' And '$(TargetFrameworkIdentifier)' == '.NETCoreApp' And '$(_TargetFrameworkVersionWithoutV)' &gt;= '3.0'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+
+
+
+  <PropertyGroup >
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>../../.nupkgs</PackageOutputPath>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
