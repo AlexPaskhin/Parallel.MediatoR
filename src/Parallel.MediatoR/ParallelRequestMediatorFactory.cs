@@ -1,4 +1,4 @@
-// Copyright © Alexander Paskhin 2020. All rights reserved.
+// Copyright © Alexander Paskhin 2021. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Parallel.MediatoR.Common;
@@ -96,6 +96,7 @@ namespace Parallel.MediatoR
                 var indexGrp = 0;
                 var iG = 0;
                 var forceTheCancellation = false;
+                ParallelExecContext<TResponse> parallelExecContext = new ParallelExecContext<TResponse>();
 
                 foreach (var group in _executionSendSequence)
                 {
@@ -115,7 +116,9 @@ namespace Parallel.MediatoR
                         {
                             try
                             {
-                                result[indexRes] = handler.ProcessAsync(request, cancellationToken);
+                                parallelExecContext.InvocationIndex = indexRes;
+                                parallelExecContext.ServicingOrder = group.Key;
+                                result[indexRes] = handler.ProcessAsync(request, parallelExecContext, cancellationToken);
                             }
                             catch (Exception ae)
                             {
@@ -140,6 +143,7 @@ namespace Parallel.MediatoR
                             try
                             {
                                 Task.WhenAll(waitList).Wait(cancellationToken);
+                                parallelExecContext.PrevResponses = waitList.Select(x => x.Result).ToArray();
                             }
                             catch
                             {

@@ -1,4 +1,4 @@
-// Copyright © Alexander Paskhin 2020. All rights reserved.
+// Copyright © Alexander Paskhin 2021. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Parallel.MediatoR.Common;
@@ -16,7 +16,7 @@ namespace Parallel.MediatoR.Request
     {
         public ServicingOrder ServicingOrder { get; }
 
-        public bool ForEachResponse { get; }
+        public bool ForEarchResponse { get; }
 
         private readonly RequestResponseDelegateAsync<TRequest, TResponse> _delegate;
 
@@ -25,11 +25,14 @@ namespace Parallel.MediatoR.Request
         /// </summary>
         /// <param name="requestDelegate">The processing delegate.</param>
         /// <param name="servicingOrder">The processing priority.</param>
-        public RequestHandlerProcessingWrapper(RequestResponseDelegateAsync<TRequest, TResponse> requestDelegate, ServicingOrder servicingOrder = ServicingOrder.Processing, bool forEachResponse = false)
+        public RequestHandlerProcessingWrapper(
+            RequestResponseDelegateAsync<TRequest, TResponse> requestDelegate,
+            ServicingOrder servicingOrder = ServicingOrder.Processing,
+            bool forEarchResponse = false)
         {
             _delegate = requestDelegate ?? throw new ArgumentNullException(nameof(requestDelegate));
             ServicingOrder = servicingOrder;
-            ForEachResponse = forEachResponse;
+            ForEarchResponse = forEarchResponse;
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace Parallel.MediatoR.Request
         /// <returns>The task with a response result.</returns>
         public Task<TResponse> ProcessAsync(TRequest request, ParallelExecContext<TResponse> parallelExecContext, CancellationToken cancellationToken)
         {
-            return _delegate(request, cancellationToken);
+            return _delegate(request, parallelExecContext, cancellationToken);
         }
     }
 }

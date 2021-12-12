@@ -1,4 +1,4 @@
-// Copyright © Alexander Paskhin 2020. All rights reserved.
+// Copyright © Alexander Paskhin 2021. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -43,7 +43,9 @@ namespace Parallel.MediatoR.DependencyInjection
         /// <param name="requestDelegate">The instance of the publish processing delegate.</param>
         /// <param name="servicingOrder">The order of the processing.</param>
         /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddRequestProcessingHandler<TRequest, TResponse>(this IServiceCollection services, RequestResponseDelegateAsync<TRequest, TResponse> requestDelegate, ServicingOrder servicingOrder = ServicingOrder.Processing) where TRequest : class where TResponse : class
+        public static IServiceCollection AddRequestProcessingHandler<TRequest, TResponse>(this IServiceCollection services,
+            RequestResponseDelegateAsync<TRequest, TResponse> requestDelegate,
+            ServicingOrder servicingOrder = ServicingOrder.Processing) where TRequest : class where TResponse : class
         {
             if (requestDelegate == null)
             {
@@ -52,6 +54,7 @@ namespace Parallel.MediatoR.DependencyInjection
             services.AddSingleton<IRequestHandler<TRequest, TResponse>>(new RequestHandlerProcessingWrapper<TRequest, TResponse>(requestDelegate, servicingOrder));
             return services;
         }
+
 
         /// <summary>
         /// Adds services required for using of Notification Parallel.Mediator.
@@ -78,7 +81,9 @@ namespace Parallel.MediatoR.DependencyInjection
         /// <param name="notificationDelegate">The instance of the publish processing delegate.</param>
         /// <param name="servicingOrder">The order of the processing.</param>
         /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddNotificationProcessingHandler<TNotification>(this IServiceCollection services, NotificationDelegateAsync<TNotification> notificationDelegate, ServicingOrder servicingOrder = ServicingOrder.Processing) where TNotification : class
+        public static IServiceCollection AddNotificationProcessingHandler<TNotification>(this IServiceCollection services,
+            NotificationDelegateAsync<TNotification> notificationDelegate,
+            ServicingOrder servicingOrder = ServicingOrder.Processing) where TNotification : class
         {
             if (notificationDelegate == null)
             {
