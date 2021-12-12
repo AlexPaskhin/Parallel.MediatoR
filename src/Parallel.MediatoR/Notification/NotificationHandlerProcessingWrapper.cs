@@ -35,7 +35,7 @@ namespace Parallel.MediatoR.Notification
         /// <param name="notification">The notification.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The task which is completed when a notification has been processed.</returns>
-        public Task ProcessNotification(TNotification request, CancellationToken cancellationToken)
+        public Task ProcessNotificationAsync(TNotification request, CancellationToken cancellationToken)
         {
             return _delegate(request, cancellationToken);
         }

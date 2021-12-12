@@ -17,19 +17,21 @@ namespace Parallel.MediatoR.DependencyInjection
     {
 
         /// <summary>
-        /// Adds services required for using of Request Parallel.Mediator.
+        /// Adds services required for using of Parallel.Mediator.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
         /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddMqRequestMediator(this IServiceCollection services)
+        public static IServiceCollection AddParallelMediator(this IServiceCollection services)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
-
             services.TryAdd(ServiceDescriptor.Singleton(typeof(IRequestMediator<,>), typeof(RequestMediatorManager<,>)));
             services.TryAdd(ServiceDescriptor.Singleton(typeof(IRequestMediatorFactory<,>), typeof(ParallelRequestMediatorFactory<,>)));
+            services.TryAdd(ServiceDescriptor.Singleton(typeof(INotificationMediator<>), typeof(NotificationMediatorManager<>)));
+            services.TryAdd(ServiceDescriptor.Singleton(typeof(INotificationMediatorFactory<>), typeof(ParallelNotificationMediatorFactory<>)));
+            services.TryAdd(ServiceDescriptor.Singleton(typeof(IParallelMediatoR), typeof(ParallelMediatoR)));
             return services;
         }
 
@@ -56,22 +58,6 @@ namespace Parallel.MediatoR.DependencyInjection
         }
 
 
-        /// <summary>
-        /// Adds services required for using of Notification Parallel.Mediator.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
-        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddMqNotificationMediator(this IServiceCollection services)
-        {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
-
-            services.TryAdd(ServiceDescriptor.Singleton(typeof(INotificationMediator<>), typeof(NotificationMediatorManager<>)));
-            services.TryAdd(ServiceDescriptor.Singleton(typeof(INotificationMediatorFactory<>), typeof(ParallelNotificationMediatorFactory<>)));
-            return services;
-        }
 
         /// <summary>
         /// Add delegate of <see cref="NotificationDelegateAsync{TRequest}"/> to the services collection.

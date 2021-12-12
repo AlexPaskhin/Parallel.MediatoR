@@ -24,8 +24,8 @@ namespace Parallel.Mediator.Abstractions.Test
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse > (TestSendDelegates.Process_Initialization,ServicingOrder.Initialization);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse > (TestSendDelegates.Process_PostProcessing,ServicingOrder.PostProcessing);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse > (TestSendDelegates.Process_PreProcessing,ServicingOrder.PreProcessing);
-            sc.AddMqNotificationMediator();
-            sc.AddMqRequestMediator();
+            sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 
@@ -37,8 +37,8 @@ namespace Parallel.Mediator.Abstractions.Test
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_Initialization, ServicingOrder.Initialization);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_PostProcessing, ServicingOrder.PostProcessing);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_PreProcessing, ServicingOrder.PreProcessing);
-            sc.AddMqNotificationMediator();
-            sc.AddMqRequestMediator();
+            sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 
@@ -47,8 +47,8 @@ namespace Parallel.Mediator.Abstractions.Test
             ServiceCollection sc = new ServiceCollection();
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_Complete10, ServicingOrder.Complete);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_Processing, ServicingOrder.Processing);
-            sc.AddMqNotificationMediator();
-            sc.AddMqRequestMediator();
+            sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 

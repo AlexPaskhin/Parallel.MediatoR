@@ -12,7 +12,7 @@ namespace Parallel.MediatoR.Notification
     /// It gets "TNotification" and return Task when it is completed.
     /// </summary>
     /// <typeparam name="TNotification">The notification type.</typeparam>
-    public interface INotificationHandler<TNotification> where TNotification : class
+    public interface INotificationHandler<in TNotification> where TNotification : class
     {
         /// <summary>
         /// The processing priority.
@@ -25,7 +25,7 @@ namespace Parallel.MediatoR.Notification
         /// <param name="notification">The notification.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The task which is completed when a notification has been processed.</returns>
-        Task ProcessNotification(TNotification notification, CancellationToken cancellationToken);
+        Task ProcessNotificationAsync(TNotification notification, CancellationToken cancellationToken);
     }
 
 }

@@ -2,15 +2,17 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using Parallel.MediatoR.Common;
-using Parallel.MediatoR.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Parallel.MediatoR
+namespace Parallel.MediatoR.Request
 {
+
+
+
     /// <summary>
     /// The default implementation of the <see cref="IRequestMediatorFactory{TRequest, TResponse}"/>.
     /// </summary>
@@ -96,7 +98,7 @@ namespace Parallel.MediatoR
                 var indexGrp = 0;
                 var iG = 0;
                 var forceTheCancellation = false;
-                ParallelExecContext<TResponse> parallelExecContext = new ParallelExecContext<TResponse>();
+                var parallelExecContext = new ParallelExecContext<TResponse>();
 
                 foreach (var group in _executionSendSequence)
                 {

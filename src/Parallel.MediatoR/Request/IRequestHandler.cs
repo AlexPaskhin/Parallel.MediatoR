@@ -13,7 +13,7 @@ namespace Parallel.MediatoR.Request
     /// </summary>
     /// <typeparam name="TRequest">The request type.</typeparam>
     /// <typeparam name="TResponse">The response type.</typeparam>
-    public interface IRequestHandler<TRequest, TResponse> where TRequest : class where TResponse : class
+    public interface IRequestHandler<in TRequest, TResponse> where TRequest : class where TResponse : class
     {
         /// <summary>
         /// The processing priority.

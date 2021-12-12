@@ -7,9 +7,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Parallel.MediatoR.Common;
-using Parallel.MediatoR.Notification;
 
-namespace Parallel.MediatoR
+namespace Parallel.MediatoR.Notification
 {
     /// <summary>
     /// Default implementation of the <see cref="INotificationMediatorFactory{TNotification}"/>.
@@ -111,7 +110,7 @@ namespace Parallel.MediatoR
                         {
                             try
                             {
-                                result[indexRes] = handler.ProcessNotification(notification, cancellationToken);
+                                result[indexRes] = handler.ProcessNotificationAsync(notification, cancellationToken);
                             }
                             catch (Exception ae)
                             {

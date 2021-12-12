@@ -13,7 +13,7 @@ namespace Parallel.Mediator.Abstractions.Test.NotificationHandlers.Mock
     {
         public ServicingOrder OrderInTheGroup => ServicingOrder.Processing;
 
-        public Task ProcessNotification(TestPublishNotication request, CancellationToken cancellationToken)
+        public Task ProcessNotificationAsync(TestPublishNotication request, CancellationToken cancellationToken)
         {
             request.Visitor.Add(OrderInTheGroup.ToString());
             return Task.Delay(10 * 1000, cancellationToken);

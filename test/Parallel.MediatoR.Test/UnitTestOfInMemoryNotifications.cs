@@ -27,8 +27,8 @@ namespace Parallel.Mediator.Abstractions.Test
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_Complete>();
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_Initilization>();
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_PostProcessing>();
-            sc.AddMqNotificationMediator();
-            sc.AddMqRequestMediator();
+            sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 
@@ -40,8 +40,8 @@ namespace Parallel.Mediator.Abstractions.Test
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_Complete>();
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_Initilization>();
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_PostProcessing>();
-            sc.AddMqNotificationMediator();
-            sc.AddMqRequestMediator();
+            sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 
@@ -50,8 +50,8 @@ namespace Parallel.Mediator.Abstractions.Test
             ServiceCollection sc = new ServiceCollection();
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_Processing>();
             sc.AddSingleton<INotificationHandler<TestPublishNotication>, MqPublishHandler_Complete10>();
-            sc.AddMqNotificationMediator();
-            sc.AddMqRequestMediator();
+            sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 
