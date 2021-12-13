@@ -41,11 +41,9 @@ namespace Parallel.MediatoR.Request
         {
             if (_cached == null)
             {
-                var sendSize = 0;
                 var executionSendSequence = new SortedList<ServicingOrder, List<IRequestHandler<TRequest, TResponse>>>(_handlers.Count());
                 foreach (var item in _handlers)
                 {
-                    sendSize++;
                     if (executionSendSequence.ContainsKey(item.ServicingOrder))
                     {
                         executionSendSequence[item.ServicingOrder].Add(item);
@@ -56,7 +54,8 @@ namespace Parallel.MediatoR.Request
                     }
 
                 }
-                _cached = new ParallelPostMediatorProvider(executionSendSequence, sendSize);
+                var maxSize = executionSendSequence.Count > 0 ? executionSendSequence.Max(s => s.Value.Count) : 0;
+                _cached = new ParallelPostMediatorProvider(executionSendSequence, maxSize);
             }
 
             return _cached;
@@ -66,14 +65,17 @@ namespace Parallel.MediatoR.Request
         {
             private readonly CancellationTokenSource cancelled = new CancellationTokenSource();
             readonly SortedList<ServicingOrder, List<IRequestHandler<TRequest, TResponse>>> _executionSendSequence;
-            readonly int _sendSize;
+            readonly int _maxSize;
 
-            public ParallelPostMediatorProvider(SortedList<ServicingOrder, List<IRequestHandler<TRequest, TResponse>>> executionSendSequence, int sendSize)
+            public ParallelPostMediatorProvider(SortedList<ServicingOrder, List<IRequestHandler<TRequest, TResponse>>> executionSendSequence, int maxSize)
             {
-                _sendSize = sendSize;
+                _maxSize = maxSize;
                 _executionSendSequence = executionSendSequence;
                 cancelled.Cancel();
             }
+
+            public override bool Equals(object obj) => obj is ParallelPostMediatorProvider provider && _maxSize == provider._maxSize;
+            public override int GetHashCode() => HashCode.Combine(_maxSize);
 
             /// <summary>
             /// Sends the request for processing by the abstract set of <see cref="IRequestHandler{TRequest, TResponse}"/>
@@ -87,18 +89,19 @@ namespace Parallel.MediatoR.Request
             /// <returns>The array of tasks that indicates processing completion.</returns>
             public Task<TResponse>[] SendAsync(TRequest request, CancellationToken cancellationToken)
             {
-                if (_sendSize == 0)
+                if (_maxSize == 0)
                 {
                     return new Task<TResponse>[] { };
                 }
 
-                var result = new Task<TResponse>[_sendSize];
+                List<Task<TResponse>> result = new List<Task<TResponse>>(_maxSize);
 
                 var indexRes = 0;
                 var indexGrp = 0;
                 var iG = 0;
                 var forceTheCancellation = false;
                 var parallelExecContext = new ParallelExecContext<TResponse>();
+                parallelExecContext.PrevResponses = new TResponse[0];
 
                 foreach (var group in _executionSendSequence)
                 {
@@ -108,11 +111,11 @@ namespace Parallel.MediatoR.Request
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
-                            result[indexRes] = Task.FromCanceled<TResponse>(cancellationToken);
+                            result.Add(Task.FromCanceled<TResponse>(cancellationToken));
                         }
                         else if (forceTheCancellation)
                         {
-                            result[indexRes] = Task.FromCanceled<TResponse>(cancelled.Token);
+                            result.Add(Task.FromCanceled<TResponse>(cancelled.Token));
                         }
                         else
                         {
@@ -120,11 +123,12 @@ namespace Parallel.MediatoR.Request
                             {
                                 parallelExecContext.InvocationIndex = indexRes;
                                 parallelExecContext.ServicingOrder = group.Key;
-                                result[indexRes] = handler.ProcessAsync(request, parallelExecContext, cancellationToken);
+
+                                result.Add(handler.ProcessAsync(request, parallelExecContext, cancellationToken));
                             }
                             catch (Exception ae)
                             {
-                                result[indexRes] = Task.FromException<TResponse>(ae);
+                                result.Add(Task.FromException<TResponse>(ae));
                                 forceTheCancellation = true;
                             }
                         }
@@ -139,24 +143,14 @@ namespace Parallel.MediatoR.Request
 
                     if (!cancellationToken.IsCancellationRequested && !forceTheCancellation)
                     {
-                        if (list.Count > 1)
+                        if (list.Count > 0)
                         {
-                            var waitList = new ArraySegment<Task<TResponse>>(result, indexGrp, list.Count);
+                            var waitList = result;
                             try
                             {
                                 Task.WhenAll(waitList).Wait(cancellationToken);
                                 parallelExecContext.PrevResponses = waitList.Select(x => x.Result).ToArray();
-                            }
-                            catch
-                            {
-                                forceTheCancellation = true;
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                result[indexGrp].Wait(cancellationToken);
+                                result.Clear();
                             }
                             catch
                             {
@@ -168,7 +162,7 @@ namespace Parallel.MediatoR.Request
                     indexGrp += list.Count;
                 }
 
-                return result;
+                return result.ToArray();
             }
         }
     }

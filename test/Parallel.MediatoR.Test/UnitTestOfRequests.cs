@@ -66,7 +66,7 @@ namespace Parallel.Mediator.Abstractions.Test
             Task.WaitAll(tsks);
 
             // Asserts
-            Assert.Equal(5, tsks.Length);
+            Assert.Equal(1, tsks.Length);
             Assert.Equal(5, rq.Visitor.Count);
             Assert.Equal(ServicingOrder.Initialization.ToString(), rq.Visitor[0]);
             Assert.Equal(ServicingOrder.PreProcessing.ToString(), rq.Visitor[1]);
@@ -90,7 +90,7 @@ namespace Parallel.Mediator.Abstractions.Test
             Assert.Throws<AggregateException>(() => Task.WaitAll(tsks));
 
             // Asserts
-            Assert.Equal(5, tsks.Length);
+            Assert.Equal(3, tsks.Length);
             Assert.Equal(3, rq.Visitor.Count);
             Assert.Equal(ServicingOrder.Initialization.ToString(), rq.Visitor[0]);
             Assert.Equal(ServicingOrder.PreProcessing.ToString(), rq.Visitor[1]);
@@ -128,7 +128,7 @@ namespace Parallel.Mediator.Abstractions.Test
 
             ts.Cancel();
             Assert.Throws<AggregateException>(() => Task.WaitAll(tsks));
-            Assert.Equal(2, tsks.Length);
+            Assert.Equal(1, tsks.Length);
         }
 
     }
