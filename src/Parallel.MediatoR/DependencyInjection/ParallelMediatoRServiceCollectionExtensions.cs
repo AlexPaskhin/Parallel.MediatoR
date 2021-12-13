@@ -10,10 +10,7 @@ using Parallel.MediatoR.Common;
 
 namespace Parallel.MediatoR.DependencyInjection
 {
-    /// <summary>
-    /// Extension methods for adding Parallel.Mediator services to the DI container.
-    /// </summary>
-    public static class ParallelMediatoRServiceCollectionExtensions
+    public static partial class ParallelMediatoRServiceCollectionExtensions
     {
 
         /// <summary>
