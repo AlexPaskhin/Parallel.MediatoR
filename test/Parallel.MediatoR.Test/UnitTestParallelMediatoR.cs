@@ -30,7 +30,6 @@ namespace Parallel.Mediator.Abstractions.Test
             var mediator = _serviceProvider.GetRequiredService<IParallelMediatoR>();
 
             // act
-
             var res = mediator.SendAsync<TestSendRequest, TestSendResponse>(new TestSendRequest());
 
             var finish = await Task.WhenAll(res);
