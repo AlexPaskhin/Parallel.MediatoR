@@ -90,7 +90,7 @@ namespace Parallel.Mediator.Abstractions.Test
             Assert.Throws<AggregateException>(() => Task.WaitAll(tsks));
 
             // Asserts
-            Assert.Equal(3, tsks.Length);
+            Assert.Equal(1, tsks.Length);
             Assert.Equal(3, rq.Visitor.Count);
             Assert.Equal(ServicingOrder.Initialization.ToString(), rq.Visitor[0]);
             Assert.Equal(ServicingOrder.PreProcessing.ToString(), rq.Visitor[1]);

@@ -122,12 +122,11 @@ namespace Parallel.MediatoR.Request
                             {
                                 parallelExecContext.InvocationIndex = indexRes;
                                 parallelExecContext.ServicingOrder = group.Key;
+
                                 result.Add(handler.ProcessAsync(request, parallelExecContext, cancellationToken));
                             }
                             catch (Exception ae)
                             {
-                                ae.Data[nameof(parallelExecContext)] = parallelExecContext;
-                                ae.Data[nameof(request)] = request;
                                 result.Add(Task.FromException<TResponse>(ae));
                                 forceTheCancellation = true;
                             }
@@ -153,13 +152,14 @@ namespace Parallel.MediatoR.Request
                                 parallelExecContext.PrevResponses = waitList.Select(x => x.Result).ToArray();
                                 result.Clear();
                             }
-                            catch
+                            catch (Exception /*ex*/)
                             {
                                 forceTheCancellation = true;
                             }
                         }
                     }
-                    else
+
+                    if (cancellationToken.IsCancellationRequested || forceTheCancellation)
                     {
                         break;
                     }
