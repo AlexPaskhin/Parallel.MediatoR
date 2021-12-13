@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(DotNetCoreAppVersion)</TargetFrameworks>
@@ -17,14 +17,15 @@
     <Product>$(ProductPrefix)</Product>
 
     <Description>
-      The Message Queue Mediator Abstraction interfaces.
+      The Parallel Mediator.
+      They are used to implement the internal application processing system.
     </Description>
 
     <PackageTags>MQ Mediator Abstraction</PackageTags>
 
     <PackageReleaseNotes>
-      The Parallel Message Queue Mediator.
-      They are used to implement the internal application message exchange system.
+      The Parallel Mediator.
+      They are used to implement the internal application processing system.
     </PackageReleaseNotes>
 
   </PropertyGroup>
