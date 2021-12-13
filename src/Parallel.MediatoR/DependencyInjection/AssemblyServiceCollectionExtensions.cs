@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Parallel.MediatoR.Notification;
 using Parallel.MediatoR.Request;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -17,7 +18,7 @@ namespace Parallel.MediatoR.DependencyInjection
     public static partial class ParallelMediatoRServiceCollectionExtensions
     {
 
-        public static void AddParallelMediatorClasses(IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Transient, params Assembly[] assembliesToScanArray )
+        public static IServiceCollection AddParallelMediatorClasses(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Transient, params Assembly[] assembliesToScanArray)
         {
             assembliesToScanArray = assembliesToScanArray.Distinct().ToArray();
 
@@ -28,34 +29,50 @@ namespace Parallel.MediatoR.DependencyInjection
                   .SelectMany(a => a.DefinedTypes)
                   .ToArray();
 
-            var openTypes = new[]
+            Type[] openTypes = new[]
                {
                     typeof(IRequestHandler<,>),
                     typeof(INotificationHandler<>)
                 };
 
-            foreach (var type in openTypes.SelectMany(openType => allTypes
-                .Where(t => t.IsClass
-                    && !t.IsGenericTypeDefinition
-                    && !t.ContainsGenericParameters
-                    && !t.IsAbstract
-                    && t.AsType().ImplementsGenericInterface(openType))))
+            foreach (var openType in openTypes)
             {
-                switch (serviceLifetime)
+
+                List<TypeInfo> filteredTypeInfo = allTypes
+                    .Where(t => t.IsClass
+                        && !t.IsGenericTypeDefinition
+                        && !t.ContainsGenericParameters
+                        && !t.IsAbstract
+                        && t.AsType().ImplementsGenericInterface(openType)).ToList();
+
+                foreach (var implementationTypeInfo in filteredTypeInfo)
                 {
-                    case ServiceLifetime.Singleton:
-                        services.TryAddSingleton(type.AsType());
-                        break;
-                    case ServiceLifetime.Scoped:
-                        services.TryAddScoped(type.AsType());
-                        break;
-                    case ServiceLifetime.Transient:
-                        services.TryAddTransient(type.AsType());
-                        break;
-                    default:
-                        break;
+
+                    var iterfaces = implementationTypeInfo.ImplementedInterfaces.Where(t => t.ImplementsGenericInterface(openType));
+
+                    foreach (var interfaceImpl in iterfaces)
+                    {
+                        Type serviceType = interfaceImpl;
+
+                        switch (serviceLifetime)
+                        {
+                            case ServiceLifetime.Singleton:
+                                services.AddSingleton(serviceType, implementationTypeInfo.AsType());
+                                break;
+                            case ServiceLifetime.Scoped:
+                                services.AddScoped(serviceType, implementationTypeInfo.AsType());
+                                break;
+                            case ServiceLifetime.Transient:
+                                services.AddTransient(serviceType, implementationTypeInfo.AsType());
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
             }
+
+            return services;
 
         }
 

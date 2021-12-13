@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace Parallel.Mediator.InMem.Test.RequestHandlers.Mock
 {
+
     public class TestSendRequest
     {
         public string Text { get; set; } = nameof(TestSendRequest);

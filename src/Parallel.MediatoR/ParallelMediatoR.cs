@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Parallel.MediatoR.Common;
 using Parallel.MediatoR.Notification;
 using Parallel.MediatoR.Request;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace Parallel.MediatoR
 
     public class ParallelMediatoR : IParallelMediatoR
     {
-        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Publish the notification for processing by the abstract set of <see cref="INotificationHandler{TRequest}"/>
@@ -35,7 +36,7 @@ namespace Parallel.MediatoR
         /// Initializes a new instance of the <see cref="Mediator"/> class.
         /// </summary>
         /// <param name="serviceFactory">The single instance factory.</param>
-        public ParallelMediatoR(ServiceProvider serviceProvider)
+        public ParallelMediatoR(IServiceProvider serviceProvider)
             => _serviceProvider = serviceProvider;
 
         /// <summary>

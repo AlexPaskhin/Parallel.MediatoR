@@ -18,7 +18,7 @@ namespace Parallel.MediatoR
         /// <param name="notification">The send notification.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The array of tasks that indicates processing completion.</returns>
-        Task[] PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken) where TNotification : class;
+        Task[] PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : class;
 
         /// <summary>
         /// Sends the request for processing by the abstract set of <see cref="IRequestHandler{TRequest, TResponse}"/>
@@ -30,6 +30,6 @@ namespace Parallel.MediatoR
         /// <param name="request">The send request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The array of tasks that indicates a processing completion.</returns>
-        Task<TResponse>[] SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken) where TRequest : class where TResponse : class;
+        Task<TResponse>[] SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default) where TRequest : class where TResponse : class;
     }
 }
