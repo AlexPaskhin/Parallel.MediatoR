@@ -97,7 +97,6 @@ namespace Parallel.MediatoR.Request
                 List<Task<TResponse>> result = new List<Task<TResponse>>(_maxSize);
 
                 var indexRes = 0;
-                var indexGrp = 0;
                 var iG = 0;
                 var forceTheCancellation = false;
                 var parallelExecContext = new ParallelExecContext<TResponse>();
@@ -123,15 +122,17 @@ namespace Parallel.MediatoR.Request
                             {
                                 parallelExecContext.InvocationIndex = indexRes;
                                 parallelExecContext.ServicingOrder = group.Key;
-
                                 result.Add(handler.ProcessAsync(request, parallelExecContext, cancellationToken));
                             }
                             catch (Exception ae)
                             {
+                                ae.Data[nameof(parallelExecContext)] = parallelExecContext;
+                                ae.Data[nameof(request)] = request;
                                 result.Add(Task.FromException<TResponse>(ae));
                                 forceTheCancellation = true;
                             }
                         }
+
                         indexRes++;
                     }
 
@@ -158,8 +159,11 @@ namespace Parallel.MediatoR.Request
                             }
                         }
                     }
+                    else
+                    {
+                        break;
+                    }
 
-                    indexGrp += list.Count;
                 }
 
                 return result.ToArray();
