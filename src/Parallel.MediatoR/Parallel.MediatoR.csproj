@@ -34,9 +34,6 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" IsImplicitlyDefined="true" />
   </ItemGroup>
 
-
-
-
   <PropertyGroup >
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>../../.nupkgs</PackageOutputPath>
