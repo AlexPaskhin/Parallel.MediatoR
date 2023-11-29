@@ -5,27 +5,25 @@ using Parallel.MediatoR.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Parallel.MediatoR.Notification
+namespace Parallel.MediatoR.Notification;
+
+/// <summary>
+/// Defines the notification processing handler. 
+/// It gets "TNotification" and return Task when it is completed.
+/// </summary>
+/// <typeparam name="TNotification">The notification type.</typeparam>
+public interface INotificationHandler<in TNotification> where TNotification : class
 {
     /// <summary>
-    /// Defines the notification processing handler. 
-    /// It gets "TNotification" and return Task when it is completed.
+    /// The processing priority.
     /// </summary>
-    /// <typeparam name="TNotification">The notification type.</typeparam>
-    public interface INotificationHandler<in TNotification> where TNotification : class
-    {
-        /// <summary>
-        /// The processing priority.
-        /// </summary>
-        ServicingOrder OrderInTheGroup { get; }
+    ServicingOrder OrderInTheGroup { get; }
 
-        /// <summary>
-        /// Handles the notification.
-        /// </summary>
-        /// <param name="notification">The notification.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The task which is completed when a notification has been processed.</returns>
-        Task ProcessNotificationAsync(TNotification notification, CancellationToken cancellationToken);
-    }
-
+    /// <summary>
+    /// Handles the notification.
+    /// </summary>
+    /// <param name="notification">The notification.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The task which is completed when a notification has been processed.</returns>
+    Task ProcessNotificationAsync(TNotification notification, CancellationToken cancellationToken);
 }

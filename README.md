@@ -3,8 +3,8 @@
 The simple abstract, Dependency Inversion solution for communicating between 
 Application hosted MicroServices.
 
-## Version 6.0.x
- - Net 6.0
+## Version 8.0.x
+ - Net 8.0
 
 ## Nuget package:
 

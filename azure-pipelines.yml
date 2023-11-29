@@ -1,0 +1,85 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+variables:
+  majorMinor: "8.0"
+  buildConfiguration: 'Release'
+  dotNetFramework: 'net8.0'
+  dotNetVersion: '8.0.x'
+  targetRuntime: 'linux-x64'
+  pathToContracts: '.nupkgs'
+  publishVstsFeed:  'Microservice-Platform-System/mps-2-nuget'
+  
+
+trigger:
+  batch: "true"
+  branches:
+    include:
+    - master
+
+pr:
+  autoCancel: "true"
+  branches:
+    include:
+    - master
+
+jobs:
+- job: build
+  
+  pool:
+    vmImage: 'Ubuntu-Latest'
+
+  variables:
+    patch: $[counter(variables['majorMinor'])]
+
+  steps:
+
+  - task: UseDotNet@2
+    inputs:
+      version: $(dotNetVersion)
+      includePreviewVersions: true
+
+  - bash: echo "The patch is $(patch)"
+    displayName: 'echo patch'
+
+  - bash: |
+      if [ $(Build.SourceBranchName) == 'master' ]
+      then
+        echo "##vso[build.updatebuildnumber]$(majorMinor).$(patch)"
+      else
+        echo "##vso[build.updatebuildnumber]$(majorMinor).$(patch)-preview"
+      fi
+    displayName: 'update build number to major.minor.patch'
+
+  - bash: echo BUILD NUMBER  == > $(Build.BuildNumber) 
+    displayName: 'Displaying version environment variable'
+
+  - script: dotnet build --configuration $(buildConfiguration) /p:BuildVersion=$(Build.BuildNumber) /p:Version=$(Build.BuildNumber) /p:PackageVersion=$(Build.BuildNumber) /p:GeneratePackageOnBuild=true
+    displayName: 'dotnet build $(buildConfiguration)'
+
+  - task: NuGetCommand@2
+    condition: eq(variables['Preview'],'false')
+    displayName: 'NuGet push'
+    inputs:
+      command: push
+      packagesToPush: '$(System.DefaultWorkingDirectory)/$(pathToContracts)/*.nupkg'
+      feedsToUse: "select"
+      publishVstsFeed: "$(publishVstsFeed)"
+      versioningScheme: byEnvVar
+      versionEnvVar: BUILD_BUILDNUMBER
+
+- job: git_tag
+  condition: eq(variables['Preview'],'false')
+  dependsOn:
+  - build
+  steps:
+  - powershell: |
+      git --version
+      Write-Host "git tag $(build.buildNumber)"
+      git -c http.extraheader="AUTHORIZATION: bearer $(system.accesstoken)" tag $(build.buildNumber)
+      Write-Host "git push origin $(build.buildNumber)"
+      git -c http.extraheader="AUTHORIZATION: bearer $(system.accesstoken)" push origin $(build.buildNumber)
+#
+    displayName: Git Tag

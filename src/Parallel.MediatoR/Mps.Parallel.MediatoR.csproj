@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(DotNetCoreAppVersion)</TargetFrameworks>
 
-    <PackageId>Parallel.MediatoR</PackageId>
+    <PackageId>Mps.Parallel.MediatoR</PackageId>
 
     <AssemblyVersion>$(CoreVersion)</AssemblyVersion>
     <FileVersion>$(CoreVersion)</FileVersion>
@@ -11,7 +11,7 @@
     <RootNamespace>Parallel.MediatoR</RootNamespace>
 
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\build\Parallel.Mediator.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\build\Parallel.MediatoR.snk</AssemblyOriginatorKeyFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 
     <Product>$(ProductPrefix)</Product>
@@ -34,23 +34,16 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" IsImplicitlyDefined="true" />
   </ItemGroup>
 
-  <PropertyGroup>
+  <PropertyGroup >
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>../../.nupkgs</PackageOutputPath>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
 
   <ItemGroup>
     <None Include="..\..\LICENSE.txt">
       <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
+      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
 

@@ -36,7 +36,11 @@ namespace Parallel.Mediator.Abstractions.Test
 
             // assert
             Assert.Equal(1, finish.Length);
+
         }
+
+
+
 
     }
 

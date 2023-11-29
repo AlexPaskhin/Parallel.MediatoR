@@ -25,6 +25,7 @@ namespace Parallel.Mediator.Abstractions.Test
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse > (TestSendDelegates.Process_PostProcessing,ServicingOrder.PostProcessing);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse > (TestSendDelegates.Process_PreProcessing,ServicingOrder.PreProcessing);
             sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 
@@ -37,6 +38,7 @@ namespace Parallel.Mediator.Abstractions.Test
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_PostProcessing, ServicingOrder.PostProcessing);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_PreProcessing, ServicingOrder.PreProcessing);
             sc.AddParallelMediator();
+            sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
 
@@ -45,6 +47,7 @@ namespace Parallel.Mediator.Abstractions.Test
             ServiceCollection sc = new ServiceCollection();
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_Complete10, ServicingOrder.Complete);
             sc.AddRequestProcessingHandler<TestSendRequest, TestSendResponse>(TestSendDelegates.Process_Processing, ServicingOrder.Processing);
+            sc.AddParallelMediator();
             sc.AddParallelMediator();
             return sc.BuildServiceProvider();
         }
@@ -59,7 +62,9 @@ namespace Parallel.Mediator.Abstractions.Test
 
             // Action
             var tsks = publishMediator.SendAsync(rq, CancellationToken.None);
+
             Task.WaitAll(tsks);
+
             // Asserts
             Assert.Equal(1, tsks.Length);
             Assert.Equal(5, rq.Visitor.Count);
@@ -68,6 +73,7 @@ namespace Parallel.Mediator.Abstractions.Test
             Assert.Equal(ServicingOrder.Processing.ToString(), rq.Visitor[2]);
             Assert.Equal(ServicingOrder.PostProcessing.ToString(), rq.Visitor[3]);
             Assert.Equal(ServicingOrder.Complete.ToString(), rq.Visitor[4]);
+
         }
 
         [Fact]
