@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     
-    <CorePackageVersion>8.0.0</CorePackageVersion>
-    <CoreVersion>8.0.0</CoreVersion>
+    <CorePackageVersion>9.0.0</CorePackageVersion>
+    <CoreVersion>9.0.0</CoreVersion>
 
   </PropertyGroup>
 </Project>

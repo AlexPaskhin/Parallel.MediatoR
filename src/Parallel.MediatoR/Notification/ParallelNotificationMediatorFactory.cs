@@ -133,7 +133,7 @@ public class ParallelNotificationMediatorFactory<TNotification> : INotificationM
                 {
                     if (list.Count > 1)
                     {
-                        var waitList = new ArraySegment<Task>(result, indexGrp, list.Count);
+                        var waitList = new ArraySegment<Task>(result, indexGrp, list.Count).ToArray();
                         try
                         {
                             Task.WhenAll(waitList).Wait(cancellationToken);

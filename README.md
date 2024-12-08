@@ -3,8 +3,8 @@
 The simple abstract, Dependency Inversion solution for communicating between 
 Application hosted MicroServices.
 
-## Version 8.0.x
- - Net 8.0
+## Version 9.0.x
+ - Net 9.0
 
 ## Nuget package:
 
@@ -16,7 +16,7 @@ Application hosted MicroServices.
 
 The Parallel.Mediator implementations are based on using **Microsoft.Extensions.DependencyInjection**
 dependency injection container.
-See test cases for a use guide.
+See test cases for a guide: http://github.com/Wallsmedia/Parallel.MediatoR
 
 
 

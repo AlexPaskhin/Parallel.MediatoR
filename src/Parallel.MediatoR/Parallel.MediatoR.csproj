@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(DotNetCoreAppVersion)</TargetFrameworks>
@@ -25,7 +25,7 @@
 
     <PackageReleaseNotes>
       The Parallel Mediator.
-      They are used to implement the internal application processing system.
+      It is used to implement the internal application processing system.
     </PackageReleaseNotes>
 
   </PropertyGroup>
